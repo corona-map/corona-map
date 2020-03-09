@@ -26,6 +26,8 @@ const colorScale = scaleLinear()
   .domain([1, 1000])
   .range(["#ffedea", "#ff5233"]);
 
+const BLUE_COLOR = '#413ea0';
+
 const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClick }) => {
   const [zoom, setZoom] = useState(1);
   // const [center, setCenter] = useState([0, 0]);
@@ -41,7 +43,7 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
 
   const getFillColor = (name, confirmed) => {
     if (name === selectedCountry) {
-      return '#00AEF0';
+      return BLUE_COLOR;
     }
 
     if (confirmed < 1) {
@@ -61,11 +63,15 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
 
   return (
     <div className='Maps'>
+      <div className='Navigation'>
+        <button onClick={onCountryClick('')}>Global</button>
+        <span>{selectedCountry ? `/ ${selectedCountry}` : ''}</span>
+      </div>
       <div className='ButtonsWrapper'>
         <button onClick={handleZoomIn}>{ "Zoom in" }</button>
         <button onClick={handleZoomOut}>{ "Zoom out" }</button>
       </div>
-      <ComposableMap data-tip='' width={300} height={150} projectionConfig={{ scale: 50 }} >
+      <ComposableMap data-tip='' width={200} height={150} projectionConfig={{ scale: 50 }} >
         <ZoomableGroup zoom={zoom}>
           <Geographies geography={worldData}>
             {({ geographies }) =>
@@ -79,7 +85,7 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
                     const { NAME, dailyReport: { confirmed, deaths, recovered } } = geo.properties;
                     const content = <>
                       <h5>{NAME}</h5>
-                      <p>Confirmed: {confirmed}</p>
+                      <p style={{ color: 'pink' }}>Confirmed: {confirmed}</p>
                       <p style={{ color: 'red' }}>Deaths: {deaths}</p>
                       <p style={{ color: 'green' }}>Recovered: {recovered}</p>
                       <p>(Click for more details)</p>
@@ -95,11 +101,11 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
                       outline: 'none',
                     },
                     hover: {
-                      fill: geo.properties.NAME === selectedCountry ? '#00AEF0' : '#F53',
+                      fill: geo.properties.NAME === selectedCountry ? BLUE_COLOR : '#F53',
                       outline: 'none'
                     },
                     pressed: {
-                      fill: geo.properties.NAME === selectedCountry ? '#00AEF0' : '#E42',
+                      fill: geo.properties.NAME === selectedCountry ? BLUE_COLOR : '#E42',
                       outline: 'none'
                     }
                   }}

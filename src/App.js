@@ -8,31 +8,44 @@ import worldData from './data/world';
 
 function App() {
   const [content, setContent] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('Germany');
+  const [selectedCountry, setSelectedCountry] = useState('');
 
   const onCountryClick = (name) => (event) => {
     setSelectedCountry(name);
   };
 
-  let countryStats = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === 'Germany');
+  let countryStats; // = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === 'Germany');
   
   if (selectedCountry) {
     countryStats = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === selectedCountry);
   } else {
     // Show world stats
+    countryStats = {
+      properties: {
+        dailyReport: {
+          confirmed: 109577,
+          deaths: 3809,
+          recovered: 62496,
+          lastUpdated: 'Mon, 09 Mar 2020 22:42:35 GMT',
+        },
+        series: [], // TODO: find series data
+      }
+    }
   }
 
   const { properties } = countryStats;
-  const { dailyReport, series, NAME: name } = properties;
+  const { dailyReport = {}, series = [], NAME: name } = properties;
 
   return (
     <div className='App'>
       <p>Last updated: {dailyReport.lastUpdated ? (new Date(dailyReport.lastUpdated)).toLocaleString() : 'Unknown'}</p>
-      <h3 className='Title'>Coronavirus outbreak live stats in {name || 'The World'}</h3>
+      <h3 className='Title'>{name ? `Coronavirus outbreak live stats in ${name}` : 'Coronavirus outbreak live stats globally'}</h3>
       <div className='Info'>
-        <div className='Left'>
-          <Chart series={series} />
-        </div>
+        {series.length > 0 &&
+          <div className='Left'>
+            <Chart series={series} />
+          </div>
+        }
         <div className='Center'>
           <h1>{dailyReport.confirmed}</h1>
           <p>Confirmed cases in {name || 'The World'}</p>
@@ -62,6 +75,14 @@ function App() {
           onCountryClick={onCountryClick}
         />
         <ReactTooltip>{content}</ReactTooltip>
+      </section>
+      <section className='Footer'>
+        <span>Data sources: </span>
+        <a href='https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports' rel='noopener noreferrer' target='_blank'>WHO</a>
+        {', '}
+        <a href='https://github.com/CSSEGISandData/COVID-19' rel='noopener noreferrer' target='_blank'>CSSEGISandData</a>
+        {', '}
+        <a href='https://www.arcgis.com/' rel='noopener noreferrer' target='_blank'>arcgis.com/</a>
       </section>
     </div>
   );

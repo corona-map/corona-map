@@ -19,23 +19,38 @@
     .Center {
       flex-basis: 40%;
       flex-shrink: 0;
+
+      h1 {
+        color: pink;
+      }
     }
   
     .Right {
+      padding-top: 8px;
+      margin-left: 10px;
       flex-basis: 30%;
       flex-shrink: 0;
       display: flex;
       justify-content: center;
+
+      h2 {
+        &:first-child {
+          color: green;
+        }
+
+        &:last-child {
+          color: red;
+        }
+      }
   
       & > div {
-        padding-top: 8px;
-
         &:first-child {
           text-align: right;
         }
   
         &:last-child {
           margin-left: 10px;
+          padding-top: 1px;
           text-align: left;
         }
       }
@@ -62,12 +77,37 @@
       width: 100%;
       position: relative;
 
+      .Navigation {
+        position: absolute;
+        top: -10px;
+        left: 0;
+        font-size: 11px;
+
+        button {
+          outline: none;
+          border: none;
+          background-color: transparent;
+          color: #413ea0;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        span {
+          color: black;
+        }
+      }
+
       .ButtonsWrapper {
         position: absolute;
-        top: 5px;
-        right: 10px;
+        top: -20px;
+        right: 0;
       }
     }
+  }
+
+  .Footer {
+    padding: 80px 0 20px;
+    font-size: 11px;
   }
 }
 
@@ -76,7 +116,7 @@
     padding: 20px 10px;
 
     .Title {
-      font-size: 42px; // 1.96em;
+      font-size: 29px; // 1.96em;
     }
   
     .Info {
@@ -85,6 +125,10 @@
       .Left {
         flex-basis: 100%;
         flex-shrink: 0;
+      }
+
+      .Right {
+        padding-top: 6px;
       }
     }
   }

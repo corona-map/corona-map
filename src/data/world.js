@@ -39784,8 +39784,10 @@ const sumSeries = (arr) => {
 //   'Sweden',
 // ];
 
+// TODO: Add more aliases, remove chart for country without cases, add World navigation
 const COUNTRY_ALIAS = {
   US: 'United States of America',
+  UK: 'United Kingdom',
   'Mainland China': 'China',
 };
 
