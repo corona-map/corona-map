@@ -14,7 +14,7 @@ function Chart({ series }) {
           top: 20, right: 20, bottom: 20, left: 20,
         }}
       >
-        {/* <CartesianGrid /> */}
+        <CartesianGrid />
         <XAxis type='category' dataKey='date' name='date' />
         <YAxis type='number' dataKey='value' name='number of cases' /* domain={[0, 1000]} */ />
         <Tooltip

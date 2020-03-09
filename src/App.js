@@ -4,11 +4,11 @@ import './App.scss';
 
 import MapChart from './MapChart';
 import Chart from './chart';
-import worldData, { lastUpdated } from './data/world';
+import worldData from './data/world';
 
 function App() {
   const [content, setContent] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState('Germany');
 
   const onCountryClick = (name) => (event) => {
     setSelectedCountry(name);
@@ -39,8 +39,8 @@ function App() {
         </div>
         <div className='Right'>
           <div>
-            <h3>{dailyReport.recovered}</h3>
-            <h3>{dailyReport.deaths}</h3>
+            <h2>{dailyReport.recovered}</h2>
+            <h2>{dailyReport.deaths}</h2>
           </div>
           <div>
             <p>

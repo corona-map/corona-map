@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import {
   ZoomableGroup,
   ComposableMap,
@@ -6,7 +6,7 @@ import {
   Geography
 } from 'react-simple-maps';
 
-import { scaleQuantize, scaleLinear } from 'd3-scale';
+import { /*scaleQuantize,*/ scaleLinear } from 'd3-scale';
 
 // const colorScale = scaleQuantize()
 //   .domain([1, 1000])

@@ -10,7 +10,6 @@
     "d3-dsv": "^1.2.0",
     "d3-scale": "^3.2.1",
     "node-sass": "^4.13.1",
-    "normalize.css": "^8.0.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",

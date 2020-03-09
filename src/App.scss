@@ -28,6 +28,8 @@
       justify-content: center;
   
       & > div {
+        padding-top: 8px;
+
         &:first-child {
           text-align: right;
         }
@@ -41,8 +43,8 @@
       p {
         display: flex;
         flex-direction: column;
-        padding-top: 7.5px;
-        padding-bottom: 7.5px;
+        padding-top: 1px;
+        padding-bottom: 1px;
       }
     }
   }
@@ -74,7 +76,7 @@
     padding: 20px 10px;
 
     .Title {
-      font-size: 1.96em;
+      font-size: 42px; // 1.96em;
     }
   
     .Info {
