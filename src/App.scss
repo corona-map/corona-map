@@ -1,59 +1,89 @@
 .App {
   text-align: center;
   padding: 20px 30px;
-}
 
-.App-header {
-  // background-color: #282c34;
-  // min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.Title {
-  margin-top: 30px;
-  margin-bottom: 20px;
-}
-
-.Info {
-  display: flex;
-
-  .Left {
-    flex-basis: 30%;
-    flex-shrink: 1;
+  .Title {
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
-
-  .Center {
-    flex-basis: 40%;
-    flex-shrink: 0;
-  }
-
-  .Right {
-    flex-basis: 30%;
-    flex-shrink: 0;
+  
+  .Info {
     display: flex;
     justify-content: center;
-
-    & > div {
-      &:first-child {
-        text-align: right;
+  
+    .Left {
+      flex-basis: 30%;
+      flex-shrink: 1;
+    }
+  
+    .Center {
+      flex-basis: 40%;
+      flex-shrink: 0;
+    }
+  
+    .Right {
+      flex-basis: 30%;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+  
+      & > div {
+        &:first-child {
+          text-align: right;
+        }
+  
+        &:last-child {
+          margin-left: 10px;
+          text-align: left;
+        }
       }
-
-      &:last-child {
-        margin-left: 10px;
-        text-align: left;
+      
+      p {
+        display: flex;
+        flex-direction: column;
+        padding-top: 7.5px;
+        padding-bottom: 7.5px;
       }
     }
-    
-    p {
-      display: flex;
-      flex-direction: column;
-      padding-top: 7.5px;
-      padding-bottom: 7.5px;
+  }
+  
+  .Content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+
+    .Maps {
+      margin-top: 30px;
+      width: 100%;
+      position: relative;
+
+      .ButtonsWrapper {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .App {
+    padding: 20px 10px;
+
+    .Title {
+      font-size: 1.96em;
+    }
+  
+    .Info {
+      flex-wrap: wrap;
+  
+      .Left {
+        flex-basis: 100%;
+        flex-shrink: 0;
+      }
     }
   }
 }

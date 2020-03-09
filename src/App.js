@@ -14,23 +14,20 @@ function App() {
     setSelectedCountry(name);
   };
 
-  let countryStats;
+  let countryStats = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === 'Germany');
   
   if (selectedCountry) {
     countryStats = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === selectedCountry);
   } else {
     // Show world stats
-    countryStats = worldData.objects.ne_110m_admin_0_countries.geometries[0];
   }
 
   const { properties } = countryStats;
   const { dailyReport, series, NAME: name } = properties;
 
-  console.log(content);
-
   return (
     <div className='App'>
-      <p>Last updated: {(new Date(lastUpdated)).toLocaleString()}</p>
+      <p>Last updated: {dailyReport.lastUpdated ? (new Date(dailyReport.lastUpdated)).toLocaleString() : 'Unknown'}</p>
       <h3 className='Title'>Coronavirus outbreak live stats in {name || 'The World'}</h3>
       <div className='Info'>
         <div className='Left'>
@@ -57,7 +54,7 @@ function App() {
           </div>
         </div>
       </div>
-      <header className='App-header'>
+      <section className='Content'>
         <MapChart
           worldData={worldData}
           setTooltipContent={setContent}
@@ -65,7 +62,7 @@ function App() {
           onCountryClick={onCountryClick}
         />
         <ReactTooltip>{content}</ReactTooltip>
-      </header>
+      </section>
     </div>
   );
 }

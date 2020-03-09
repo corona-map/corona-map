@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import {
   ZoomableGroup,
   ComposableMap,
@@ -27,14 +27,15 @@ const colorScale = scaleLinear()
   .range(["#ffedea", "#ff5233"]);
 
 const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClick }) => {
-  // const [scale, setScale] = useState(200);
+  const [zoom, setZoom] = useState(1);
+  // const [center, setCenter] = useState([0, 0]);
   // const handleWheel = (event) => {
   //   event.preventDefault();
   //   if (event.deltaY > 0) {
-  //     setScale(oldScale => oldScale / 1.1)
+  //     setZoom(oldScale => oldScale / 1.1)
   //   }
   //   if (event.deltaY < 0) {
-  //     setScale(oldScale => oldScale * 1.1)
+  //     setZoom(oldScale => oldScale * 1.1)
   //   }
   // };
 
@@ -50,10 +51,22 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
     return colorScale(confirmed);
   };
 
+  const handleZoomIn = () => setZoom(oldScale => oldScale * 1.1);
+  const handleZoomOut = () => setZoom(oldScale => oldScale / 1.1);
+
+  // useEffect(() => {
+  //   // setZoom(2);
+  //   setCenter([0, 0]);
+  // }, [selectedCountry]);
+
   return (
-    <>
-      <ComposableMap data-tip='' projectionConfig={{ scale: 100 }} >
-        <ZoomableGroup>
+    <div className='Maps'>
+      <div className='ButtonsWrapper'>
+        <button onClick={handleZoomIn}>{ "Zoom in" }</button>
+        <button onClick={handleZoomOut}>{ "Zoom out" }</button>
+      </div>
+      <ComposableMap data-tip='' width={300} height={150} projectionConfig={{ scale: 50 }} >
+        <ZoomableGroup zoom={zoom}>
           <Geographies geography={worldData}>
             {({ geographies }) =>
               (geographies).map(geo => (
@@ -65,10 +78,11 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
                   onMouseEnter={() => {
                     const { NAME, dailyReport: { confirmed, deaths, recovered } } = geo.properties;
                     const content = <>
-                      <h3>{NAME}</h3>
+                      <h5>{NAME}</h5>
                       <p>Confirmed: {confirmed}</p>
                       <p style={{ color: 'red' }}>Deaths: {deaths}</p>
                       <p style={{ color: 'green' }}>Recovered: {recovered}</p>
+                      <p>(Click for more details)</p>
                     </>;
                     setTooltipContent(content);
                   }}
@@ -95,7 +109,7 @@ const MapChart = ({ worldData, setTooltipContent, selectedCountry, onCountryClic
           </Geographies>
         </ZoomableGroup>
       </ComposableMap>
-    </>
+    </div>
   );
 };
 

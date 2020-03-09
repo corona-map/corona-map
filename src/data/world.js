@@ -39795,6 +39795,9 @@ WORLD_MAP.objects.ne_110m_admin_0_countries.geometries.forEach(country => {
   const properties = country.properties;
   const countryDailyReportData = dailyReport.filter(item => mapCountryToAlias(item['Country/Region']) === properties.NAME);
   properties.dailyReport = sumReport(countryDailyReportData);
+  if (countryDailyReportData.length > 0) {
+    properties.dailyReport.lastUpdated = countryDailyReportData[0]['Last Update'];
+  }
   const countrySeriesData = series.filter(item => mapCountryToAlias(item['Country/Region']) === country.properties.NAME);
   properties.series = sumSeries(countrySeriesData);
   // TODO: Add all countries
@@ -39806,4 +39809,4 @@ WORLD_MAP.objects.ne_110m_admin_0_countries.geometries.forEach(country => {
 });
 
 export default WORLD_MAP;
-export const lastUpdated = '2020-03-02T20:23:16';
+// Datasource: https://github.com/CSSEGISandData/COVID-19
