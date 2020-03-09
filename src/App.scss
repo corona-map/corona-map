@@ -1,0 +1,59 @@
+.App {
+  text-align: center;
+  padding: 20px 30px;
+}
+
+.App-header {
+  // background-color: #282c34;
+  // min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.Title {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.Info {
+  display: flex;
+
+  .Left {
+    flex-basis: 30%;
+    flex-shrink: 1;
+  }
+
+  .Center {
+    flex-basis: 40%;
+    flex-shrink: 0;
+  }
+
+  .Right {
+    flex-basis: 30%;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+
+    & > div {
+      &:first-child {
+        text-align: right;
+      }
+
+      &:last-child {
+        margin-left: 10px;
+        text-align: left;
+      }
+    }
+    
+    p {
+      display: flex;
+      flex-direction: column;
+      padding-top: 7.5px;
+      padding-bottom: 7.5px;
+    }
+  }
+}
