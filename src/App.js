@@ -25,8 +25,8 @@ function App() {
         dailyReport: {
           confirmed: 109577,
           deaths: 3809,
-          recovered: 62496,
-          lastUpdated: 'Mon, 09 Mar 2020 22:42:35 GMT',
+          recovered: 64014,
+          lastUpdated: 'Mon, 10 Mar 2020 09:42:35 GMT',
         },
         series: [], // TODO: find series data
       }
