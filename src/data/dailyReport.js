@@ -1,6 +1,7 @@
 import { csvParse } from 'd3-dsv';
 
-const DATA = `Province/State,Country/Region,Last Update,Confirmed,Deaths,Recovered,Latitude,Longitude
+export default csvParse(
+`Province/State,Country/Region,Last Update,Confirmed,Deaths,Recovered,Latitude,Longitude
 Hubei,Mainland China,2020-03-09T14:33:03,67743,3008,46488,30.9756,112.2707
 ,Italy,2020-03-09T18:13:11,9172,463,724,43.0000,12.0000
 ,South Korea,2020-03-09T09:03:03,7478,53,118,36.0000,128.0000
@@ -266,6 +267,5 @@ Northern Territory,Australia,2020-03-06T04:33:03,0,0,0,-12.4634,130.8456
 "Lackland, TX (From Diamond Princess)",US,2020-02-24T23:33:02,0,0,0,29.3829,-98.6134
 "Montgomery County, TX",US,2020-03-07T19:53:02,0,0,0,30.3213,-95.4778
 "Omaha, NE (From Diamond Princess)",US,2020-02-24T23:33:02,0,0,0,41.2545,-95.9758
-"Travis, CA (From Diamond Princess)",US,2020-02-24T23:33:02,0,0,0,38.2721,-121.9399`;
-
-export default csvParse(DATA);
+"Travis, CA (From Diamond Princess)",US,2020-02-24T23:33:02,0,0,0,38.2721,-121.9399
+`);

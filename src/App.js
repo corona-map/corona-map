@@ -1,46 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactTooltip from 'react-tooltip';
+import { csv, json }from 'd3-fetch';
+import { feature } from 'topojson-client';
 import './App.scss';
 
 import MapChart from './MapChart';
 import Chart from './chart';
-import worldData from './data/world';
+import generateData, { DAILY_REPORT_URL, TIME_SERIES_URL, MAP_URL, WORLD_DATA } from './data/world';
 
 function App() {
-  const [content, setContent] = useState('');
+  const [tooltipContent, setTooltipContent] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
+  const [geographies, setGeographies] = useState();
+  const [dailyReports, setDailyReports] = useState([]);
+  const [timeSeries, setTimeSeries] = useState([]);
+  const [displayData, setDisplayData] = useState({
+    dailyReport: {},
+    series: [],
+    name: '',
+  });
 
-  const onCountryClick = (name) => (event) => {
-    setSelectedCountry(name);
-  };
+  useEffect(() => {
+    const fetchMapData = async () => {
+      const response = await json(MAP_URL);
+      const features = feature(response, response.objects[Object.keys(response.objects)[0]]).features;
+      setGeographies(features);
+    };
+    const fetchDailyReports = async () => {
+      const response = await csv(DAILY_REPORT_URL);
+      setDailyReports(response);
+    };
+    const fetchTimeSeries = async () => {
+      const response = await csv(TIME_SERIES_URL);
+      setTimeSeries(response);
+    };
 
-  let countryStats; // = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === 'Germany');
-  
-  if (selectedCountry) {
-    countryStats = worldData.objects.ne_110m_admin_0_countries.geometries.find(country => country.properties.NAME === selectedCountry);
-  } else {
-    // Show world stats
-    countryStats = {
-      properties: {
-        dailyReport: {
-          confirmed: 109577,
-          deaths: 3809,
-          recovered: 64014,
-          lastUpdated: 'Mon, 10 Mar 2020 09:42:35 GMT',
-        },
-        series: [], // TODO: find series data
-      }
+    fetchMapData();
+    fetchDailyReports();
+    fetchTimeSeries();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedCountry) {
+      setDisplayData(WORLD_DATA);
+      return;
     }
-  }
+    if (dailyReports.length && timeSeries.length) {
+      setDisplayData(generateData(selectedCountry, dailyReports, timeSeries));
+    }
+  }, [dailyReports, timeSeries, selectedCountry]);
 
-  const { properties } = countryStats;
-  const { dailyReport = {}, series = [], NAME: name } = properties;
+  const handleCountrySelect = (event) => {
+    setSelectedCountry(event.target.value);
+  };
+  
+  const { dailyReport = {}, series = [], name } = displayData;
 
   return (
     <div className='App'>
+      <select value={selectedCountry} onChange={handleCountrySelect}>
+        <option value=''>World</option>
+        {(geographies || []).map(geography => geography.properties.NAME).sort().map(countryName =>
+          <option key={countryName} value={countryName}>{countryName}</option>
+        )}
+      </select>
       <p>Last updated: {dailyReport.lastUpdated ? (new Date(dailyReport.lastUpdated)).toLocaleString() : 'Unknown'}</p>
-      <h3 className='Title'>{name ? `Coronavirus outbreak live stats in ${name}` : 'Coronavirus outbreak live stats globally'}</h3>
-      <div className='Info'>
+      <h3 className='Title'>CORONAVIRUS OUTBREAK LIVE STATS</h3>
+      <section className='Content'>
+        <MapChart
+          features={geographies}
+          markers={dailyReports}
+          setTooltipContent={setTooltipContent}
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+        />
+        <ReactTooltip>{tooltipContent}</ReactTooltip>
+      </section>
+      <section className='Info'>
         {series.length > 0 &&
           <div className='Left'>
             <Chart series={series} />
@@ -48,7 +84,7 @@ function App() {
         }
         <div className='Center'>
           <h1>{dailyReport.confirmed}</h1>
-          <p>Confirmed cases in {name || 'The World'}</p>
+          <p>Confirmed cases in {name}</p>
         </div>
         <div className='Right'>
           <div>
@@ -66,17 +102,9 @@ function App() {
             </p>
           </div>
         </div>
-      </div>
-      <section className='Content'>
-        <MapChart
-          worldData={worldData}
-          setTooltipContent={setContent}
-          selectedCountry={selectedCountry}
-          onCountryClick={onCountryClick}
-        />
-        <ReactTooltip>{content}</ReactTooltip>
       </section>
       <section className='Footer'>
+        <p>From Munich with ❤︎</p>
         <span>Data sources: </span>
         <a href='https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports' rel='noopener noreferrer' target='_blank'>WHO</a>
         {', '}
@@ -89,3 +117,4 @@ function App() {
 }
 
 export default App;
+ // csv(`${process.env.PUBLIC_URL}/03-12-2020.csv`).then(res => console.log(res));

@@ -3,10 +3,51 @@
   padding: 20px 30px;
 
   .Title {
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
   }
   
+  .Content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+
+    .Maps {
+      margin-top: 30px;
+      width: 60%;
+      position: relative;
+
+      .Navigation {
+        position: absolute;
+        top: -10px;
+        left: 0;
+        font-size: 11px;
+
+        button {
+          outline: none;
+          border: none;
+          background-color: transparent;
+          color: #413ea0;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        span {
+          color: black;
+        }
+      }
+
+      .ButtonsWrapper {
+        position: absolute;
+        top: -20px;
+        right: 0;
+      }
+    }
+  }
+
   .Info {
     display: flex;
     justify-content: center;
@@ -63,47 +104,6 @@
       }
     }
   }
-  
-  .Content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-
-    .Maps {
-      margin-top: 30px;
-      width: 100%;
-      position: relative;
-
-      .Navigation {
-        position: absolute;
-        top: -10px;
-        left: 0;
-        font-size: 11px;
-
-        button {
-          outline: none;
-          border: none;
-          background-color: transparent;
-          color: #413ea0;
-          text-decoration: underline;
-          cursor: pointer;
-        }
-
-        span {
-          color: black;
-        }
-      }
-
-      .ButtonsWrapper {
-        position: absolute;
-        top: -20px;
-        right: 0;
-      }
-    }
-  }
 
   .Footer {
     padding: 80px 0 20px;
@@ -117,6 +117,12 @@
 
     .Title {
       font-size: 29px; // 1.96em;
+    }
+
+    .Content {
+      .Maps {
+        width: 100%;
+      }
     }
   
     .Info {
