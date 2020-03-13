@@ -158,7 +158,7 @@ const MapChart = (props) => {
                     fontSize={+marker.fontSize || 2}
                     style={{ fontFamily: 'system-ui', fill: '#000', cursor: 'default' }}
                   >
-                    {marker['Province/State']}
+                    {marker['Province/State'] || getCountryAlias(marker['Country/Region'])}
                   </text>
                 }
               </g>

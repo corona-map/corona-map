@@ -11,7 +11,8 @@ import WORLD_DATA from './data/world';
 
 function App() {
   const [tooltipContent, setTooltipContent] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const defaultCountry = decodeURIComponent(window.location.hash).slice(1);
+  const [selectedCountry, setSelectedCountry] = useState(defaultCountry);
   const [geographies, setGeographies] = useState();
   const [dailyReports, setDailyReports] = useState([]);
   const [timeSeries, setTimeSeries] = useState([]);
@@ -22,16 +23,10 @@ function App() {
   });
 
   useEffect(() => {
-    const defaultCountry = decodeURIComponent(window.location.hash).slice(1);
-    console.log(defaultCountry);
     const fetchMapData = async () => {
       const response = await json(MAP_URL);
       const features = feature(response, response.objects[Object.keys(response.objects)[0]]).features;
       setGeographies(features);
-      
-      if (defaultCountry && features.findIndex(feature => feature.properties.NAME === defaultCountry) > -1) {
-        setSelectedCountry(defaultCountry);
-      }
     };
     const fetchDailyReports = async () => {
       const response = await csv(DAILY_REPORT_URL);
