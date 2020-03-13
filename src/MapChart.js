@@ -10,7 +10,7 @@ import {
 import { scaleLinear, scaleQuantile } from 'd3-scale';
 import { geoPath, geoCentroid, geoEqualEarth } from 'd3-geo';
 
-import { getCountryAlias, ZOOM_EXCEPTIONS } from './data/world';
+import { getCountryAlias, ZOOM_EXCEPTIONS, COUNTRY_EXCEPTIONS, EXTRA_MARKERS } from './data/helpers';
 
 const BLUE_COLOR = '#413ea0';
 const colorScale = scaleLinear()
@@ -33,10 +33,14 @@ const getFillColor = (name, selectedCountry, confirmed) => {
   return colorScale(confirmed);
 };
 
+const DEFAULT_CENTER = [0, 10];
+const DEFAULT_WIDTH = 800;
+const DEFAULT_HEIGHT = 460;
+
 const MapChart = (props) => {
-  const { features = [], markers, setTooltipContent, selectedCountry, setSelectedCountry } = props;
+  const { features = [], dailyReports = [], setTooltipContent, selectedCountry, setSelectedCountry } = props;
   const [zoom, setZoom] = useState(1);
-  const [center, setCenter] = useState([0, 0]);
+  const [center, setCenter] = useState(DEFAULT_CENTER);
   const [lastClick, setLastClick] = useState({ x: 0, y: 0 });
 
   const handleZoomIn = () => setZoom(oldScale => oldScale * 1.1);
@@ -58,7 +62,7 @@ const MapChart = (props) => {
     // Add ZOOM_EXCEPTIONS: Russia, France
     const selectedGeography = features.find(feature => feature.properties.NAME === selectedCountry);
     if (!selectedGeography) {
-      setCenter([0, 0]);
+      setCenter(DEFAULT_CENTER);
       setZoom(1);
       return;
     }
@@ -70,23 +74,25 @@ const MapChart = (props) => {
       const bounds = path.bounds(selectedGeography);
       const dx = bounds[1][0] - bounds[0][0];
       const dy = bounds[1][1] - bounds[0][1];
-      const z = 0.8 / Math.max(dx / 800, dy / 600); // width and height
+      const z = 0.8 / Math.max(dx / DEFAULT_WIDTH, dy / DEFAULT_HEIGHT); // width and height
       setZoom(z);
     }
     setCenter(geoCentroid(selectedGeography));
   }, [features, selectedCountry]);
 
+  const markers = dailyReports.filter(c => COUNTRY_EXCEPTIONS.indexOf(getCountryAlias(c['Country/Region'])) < 0);
+
   return (
     <div className='Maps'>
       <div className='Navigation'>
-        <button onClick={() => setSelectedCountry('')}>Global</button>
+        <button onClick={() => setSelectedCountry('')}>The World</button>
         <span>{selectedCountry ? `/ ${selectedCountry}` : ''}</span>
       </div>
       <div className='ButtonsWrapper'>
         <button onClick={handleZoomIn}>{ 'Zoom in' }</button>
         <button onClick={handleZoomOut}>{ 'Zoom out' }</button>
       </div>
-      <ComposableMap data-tip='' width={800} height={600} projectionConfig={{ scale: 200 }} >
+      <ComposableMap data-tip='' width={DEFAULT_WIDTH} height={DEFAULT_HEIGHT} projectionConfig={{ scale: 200 }} >
         <ZoomableGroup
           zoom={zoom}
           center={center}
@@ -101,6 +107,9 @@ const MapChart = (props) => {
                     onMouseDown={(event) => setLastClick({ x: event.pageX, y: event.pageY })}
                     onMouseUp={onGeographyClick(geo.properties.NAME)}
                     onMouseEnter={() => {
+                      if (geo.properties.NAME === selectedCountry) {
+                        return;
+                      }
                       setTooltipContent(geo.properties.NAME);
                     }}
                     onMouseLeave={() => {
@@ -125,31 +134,34 @@ const MapChart = (props) => {
               }
             </Geographies>
           }
-          {markers.map((marker, idx) => (
+          {markers.concat(EXTRA_MARKERS).map((marker, idx) => (
             <Marker key={`marker-${idx + 1}`} coordinates={[marker.Longitude, marker.Latitude]}>
-              <circle
-                r={selectedCountry ? radiusScale(marker.Confirmed) / 2 : radiusScale(marker.Confirmed)}
-                fill="#00AEF0"
-                stroke="#fff"
-                strokeWidth={0.2}
+              <g
                 onClick={() => onMarkerClick(getCountryAlias(marker['Country/Region']))} // Alias
                 onMouseEnter={() => {
-                  setTooltipContent(`${marker.Confirmed} – confirmed cases`);
+                  setTooltipContent(`${+marker.Confirmed} – confirmed cases`);
                 }}
                 onMouseLeave={() => {
                   setTooltipContent('');
                 }}
-              />
-              {getCountryAlias(marker['Country/Region']) === selectedCountry &&
-                <text
-                  textAnchor="middle"
-                  y={radiusScale(marker.Confirmed) + 4}
-                  fontSize={2}
-                  style={{ fontFamily: "system-ui", fill: "#fff" }}
-                >
-                  {marker['Province/State']}
-                </text>
-              }
+              >
+                <circle
+                  r={selectedCountry ? radiusScale(+marker.Confirmed) * 5 / zoom : radiusScale(marker.Confirmed)}
+                  fill='#00AEF0'
+                  stroke='#fff'
+                  strokeWidth={0.2 / zoom}
+                />
+                {getCountryAlias(marker['Country/Region']) === selectedCountry &&
+                  <text
+                    textAnchor='middle'
+                    y={1}
+                    fontSize={marker.fontSize || 2}
+                    style={{ fontFamily: 'system-ui', fill: '#000', cursor: 'default' }}
+                  >
+                    {marker['Province/State']}
+                  </text>
+                }
+              </g>
             </Marker>
           ))}
         </ZoomableGroup>

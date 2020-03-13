@@ -6,7 +6,8 @@ import './App.scss';
 
 import MapChart from './MapChart';
 import Chart from './chart';
-import generateData, { DAILY_REPORT_URL, TIME_SERIES_URL, MAP_URL, WORLD_DATA } from './data/world';
+import generateData, { DAILY_REPORT_URL, TIME_SERIES_URL, MAP_URL } from './data/helpers';
+import WORLD_DATA from './data/world';
 
 function App() {
   const [tooltipContent, setTooltipContent] = useState('');
@@ -21,10 +22,16 @@ function App() {
   });
 
   useEffect(() => {
+    const defaultCountry = decodeURIComponent(window.location.hash).slice(1);
+    console.log(defaultCountry);
     const fetchMapData = async () => {
       const response = await json(MAP_URL);
       const features = feature(response, response.objects[Object.keys(response.objects)[0]]).features;
       setGeographies(features);
+      
+      if (defaultCountry && features.findIndex(feature => feature.properties.NAME === defaultCountry) > -1) {
+        setSelectedCountry(defaultCountry);
+      }
     };
     const fetchDailyReports = async () => {
       const response = await csv(DAILY_REPORT_URL);
@@ -50,6 +57,10 @@ function App() {
     }
   }, [dailyReports, timeSeries, selectedCountry]);
 
+  useEffect(() => {
+    window.location.hash = encodeURIComponent(selectedCountry);
+  }, [selectedCountry]);
+
   const handleCountrySelect = (event) => {
     setSelectedCountry(event.target.value);
   };
@@ -58,8 +69,8 @@ function App() {
 
   return (
     <div className='App'>
-      <select value={selectedCountry} onChange={handleCountrySelect}>
-        <option value=''>World</option>
+      <select className='Selections' value={selectedCountry} onChange={handleCountrySelect}>
+        <option value=''>The World</option>
         {(geographies || []).map(geography => geography.properties.NAME).sort().map(countryName =>
           <option key={countryName} value={countryName}>{countryName}</option>
         )}
@@ -69,7 +80,7 @@ function App() {
       <section className='Content'>
         <MapChart
           features={geographies}
-          markers={dailyReports}
+          dailyReports={dailyReports}
           setTooltipContent={setTooltipContent}
           selectedCountry={selectedCountry}
           setSelectedCountry={setSelectedCountry}
