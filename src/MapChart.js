@@ -33,7 +33,7 @@ const getFillColor = (name, selectedCountry, confirmed) => {
   return colorScale(confirmed);
 };
 
-const DEFAULT_CENTER = [0, 10];
+const DEFAULT_CENTER = [15, 10];
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 460;
 
@@ -67,6 +67,7 @@ const MapChart = (props) => {
       return;
     }
 
+    setCenter(geoCentroid(selectedGeography));
     if (ZOOM_EXCEPTIONS[selectedCountry]) {
       setZoom(ZOOM_EXCEPTIONS[selectedCountry]);
     } else {
@@ -77,7 +78,6 @@ const MapChart = (props) => {
       const z = 0.8 / Math.max(dx / DEFAULT_WIDTH, dy / DEFAULT_HEIGHT); // width and height
       setZoom(z);
     }
-    setCenter(geoCentroid(selectedGeography));
   }, [features, selectedCountry]);
 
   const markers = dailyReports.filter(c => COUNTRY_EXCEPTIONS.indexOf(getCountryAlias(c['Country/Region'])) < 0);
@@ -146,7 +146,7 @@ const MapChart = (props) => {
                 }}
               >
                 <circle
-                  r={selectedCountry ? radiusScale(+marker.Confirmed) * 5 / zoom : radiusScale(marker.Confirmed)}
+                  r={radiusScale(+marker.Confirmed / (zoom * 2))}
                   fill='#00AEF0'
                   stroke='#fff'
                   strokeWidth={0.2 / zoom}
@@ -155,7 +155,7 @@ const MapChart = (props) => {
                   <text
                     textAnchor='middle'
                     y={1}
-                    fontSize={marker.fontSize || 2}
+                    fontSize={+marker.fontSize || 2}
                     style={{ fontFamily: 'system-ui', fill: '#000', cursor: 'default' }}
                   >
                     {marker['Province/State']}
