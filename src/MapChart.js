@@ -47,7 +47,7 @@ const MapChart = (props) => {
   const handleZoomOut = () => setZoom(oldScale => oldScale / 1.1);
 
   const onGeographyClick = (name) => (event) => {
-    if (Math.abs(event.pageX - lastClick.x) + Math.abs(event.pageY - lastClick.y) > 10) {
+    if (Math.abs(event.pageX - lastClick.x) + Math.abs(event.pageY - lastClick.y) > 2) {
       return;
     }
 
@@ -87,6 +87,9 @@ const MapChart = (props) => {
       <div className='Navigation'>
         <button onClick={() => setSelectedCountry('')}>The World</button>
         <span>{selectedCountry ? `/ ${selectedCountry}` : ''}</span>
+      </div>
+      <div className='ZoomInfo'>
+        <p>Zoom: x{zoom.toFixed(1)}</p>
       </div>
       <div className='ButtonsWrapper'>
         <button onClick={handleZoomIn}>{ 'Zoom in' }</button>

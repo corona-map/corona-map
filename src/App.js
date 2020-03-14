@@ -117,6 +117,8 @@ function App() {
         <a href='https://github.com/CSSEGISandData/COVID-19' rel='noopener noreferrer' target='_blank'>CSSEGISandData</a>
         {', '}
         <a href='https://www.arcgis.com/' rel='noopener noreferrer' target='_blank'>arcgis.com/</a>
+        {', '}
+        <a href='https://www.morgenpost.de/' rel='noopener noreferrer' target='_blank'>Berliner Morgenpost/</a>
       </section>
     </div>
   );
