@@ -119,6 +119,7 @@ function App() {
         <a href='https://www.arcgis.com/' rel='noopener noreferrer' target='_blank'>arcgis.com/</a>
         {', '}
         <a href='https://www.morgenpost.de/' rel='noopener noreferrer' target='_blank'>Berliner Morgenpost/</a>
+        <p>This project is open-sourced here: <a href='https://github.com/corona-map/corona-map.github.io' rel='noopener noreferrer' target='_blank'>Github</a></p>
       </section>
     </div>
   );
