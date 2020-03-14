@@ -76,7 +76,7 @@ const MapChart = (props) => {
       const dx = bounds[1][0] - bounds[0][0];
       const dy = bounds[1][1] - bounds[0][1];
       const z = 0.8 / Math.max(dx / DEFAULT_WIDTH, dy / DEFAULT_HEIGHT); // width and height
-      setZoom(z);
+      setZoom(Math.min(z, 50)); // Zoom max 50 times
     }
   }, [features, selectedCountry]);
 

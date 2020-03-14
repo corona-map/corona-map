@@ -1,9 +1,16 @@
+/*
+There are 3 things need to be updated:
+ - Date in helpers.js for dailyReports.
+ - Here: number (confirmed, deaths, recovered), lastUpdated + series
+ - germany.js: Same as above + rawData for cities
+*/
+
 export default {
   dailyReport: {
-    confirmed: 140616,
-    deaths: 5353,
-    recovered: 70655,
-    lastUpdated: 'Mon, 12 Mar 2020 09:42:35 GMT',
+    confirmed: 145369,
+    deaths: 5429,
+    recovered: 71688,
+    lastUpdated: 'Mon, 14 Mar 2020 09:02:35 GMT',
   },
   series: [
     { date: '3/6/20', value: 101648 },
@@ -13,6 +20,8 @@ export default {
     { date: '3/10/20', value: 118700 },
     { date: '3/11/20', value: 125923 },
     { date: '3/12/20', value: 129010 },
+    { date: '3/13/20', value: 135310 },
+    { date: '3/14/20', value: 145369 },
   ],
   name: 'The World',
 };

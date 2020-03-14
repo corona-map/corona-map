@@ -1,9 +1,9 @@
 export const dailyReport = {
   dailyReport: {
-    confirmed: 3428,
+    confirmed: 3675,
     recovered: 46,
     deaths: 8,
-    lastUpdated: 'Mon, 12 Mar 2020 09:42:35 GMT',
+    lastUpdated: 'Mon, 14 Mar 2020 09:02:35 GMT',
   },
   series: [
     { date: '3/5/20', value: 349 },
@@ -14,11 +14,13 @@ export const dailyReport = {
     { date: '3/10/20', value: 1565 },
     { date: '3/11/20', value: 1966 },
     { date: '3/12/20', value: 2745 },
+    { date: '3/13/20', value: 3118 },
+    { date: '3/14/20', value: 3675 },
   ],
   name: 'Germany',
 };
 
-export const cities = [
+const cities = [
   {
     'Country/Region': 'Germany',
     'fontSize': '1',
@@ -148,3 +150,34 @@ export const cities = [
     'Confirmed': '18'
   }
 ];
+
+/*
+https://interaktiv.morgenpost.de/corona-virus-karte-infektionen-deutschland-weltweit/?fbclid=IwAR04HlqzakGaNssQzbz4d8o8R3gz0C910U8tvfYlBT6P0lVJJvHfk9uS2rc
+*/
+const rawData = `Nordrhein-Westfalen	1.433	27	4	
+Baden-Württemberg	569	2	3	
+Bayern	558	14	1	
+Niedersachsen	230	1	0	
+Berlin	174	0	0	
+Hessen	148	0	0	
+Rheinland-Pfalz	102	1	0	
+Hamburg	99	0	0	
+Sachsen	83	0	0	
+Schleswig-Holstein	48	0	0	
+Brandenburg	44	0	0	
+Bremen	42	1	0	
+Sachsen-Anhalt	42	0	0	
+Saarland	40	0	0	
+Mecklenburg-Vorpommern	33	0	0	
+Thüringen	30	0	0`;
+
+const statesReports = rawData.split('\n');
+statesReports.forEach(report => {
+  const [ name, confirmed ] = report.split('\t');
+  const city = cities.find(city => city['Province/State'] === name);
+  if (city) {
+    city.Confirmed = confirmed.toString();
+  }
+});
+
+export { cities };

@@ -1,6 +1,6 @@
 import { dailyReport as GermanyReport, cities as GermanySeries } from './germany';
 
-const TODAY = '03-12-2020';
+const TODAY = '03-13-2020';
 export const DAILY_REPORT_URL = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/${TODAY}.csv`;
 export const TIME_SERIES_URL = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv';
 export const MAP_URL = 'https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json';
