@@ -1,0 +1,23 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - master
+  
+  pool:
+    vmImage: 'ubuntu-latest'
+  
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '13.x'
+    displayName: 'Install Node.js'
+  
+  - script: |
+      git config user.email "mvtuong90@gmail.com"
+      git config user.name "mvtuong"
+      yarn install
+      yarn deploy -- -r https://$(azure_pat)@github.com/corona-map/corona-map.github.io.git
+    displayName: 'yarn install and deploy'
